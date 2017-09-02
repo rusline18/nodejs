@@ -11,17 +11,26 @@ rl.question('node js это круто? ', (answer) => {
 	switch (answer.toLowerCase()){
 		case 'да':
 		case 'yes':
-			cursor.green();
-			console.log(answer, '- это правильный ответ');
-			cursor.fg.reset();
+			answerUser(true, answer);
 			break;
 		default:
-			cursor.beep();
-			cursor.red();
-			console.log(answer, '-ошибочное мнение');
-			cursor.fg.reset();
-			console.log('Попробуйте еще раз');
+			answerUser(false, answer);
+			break;
 	}
 	rl.close();
 } );
 rl.write('Да');
+
+function answerUser(bool, answer){
+	if (bool == true) {
+		cursor.green();
+		console.log(answer, '- это правильный ответ');
+		cursor.fg.reset();
+	} else {
+		cursor.beep();
+		cursor.red();
+		console.log(answer, '-ошибочное мнение');
+		cursor.fg.reset();
+		console.log('Попробуйте еще раз');
+	}
+}
