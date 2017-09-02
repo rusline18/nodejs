@@ -1,0 +1,22 @@
+{
+  "name": "nodejslession",
+  "version": "1.0.0",
+  "description": "Уроки по node js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rusline18/nodejs.git"
+  },
+  "author": "Ruslan Absalyamov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rusline18/nodejs/issues"
+  },
+  "homepage": "https://github.com/rusline18/nodejs#readme",
+  "dependencies": {
+    "ansi": "^0.3.1"
+  }
+}
