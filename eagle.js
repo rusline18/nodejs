@@ -1,4 +1,5 @@
 var prompt = require('prompt');
+var fs = require('fs');
 
 var max = 2, min = 1;
 var eagle = Math.floor(Math.random() * (max-min+1))+min;
@@ -19,7 +20,15 @@ var schema = {
 prompt.get(schema, function(err, result){
 	if (result.choise == eagle) {
 		console.log('Вы угадали');
+		writeLog(eagle+': '+true);
 	} else {
 		console.log('Вы не угадали');
+		writeLog(eagle+': '+false);
 	}
-})
+});
+
+function writeLog(message){
+	fs.appendFile('log.txt', message+'\n', 'utf8', (err) => {
+		if (err) {throw err};
+	});
+}
