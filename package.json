@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/rusline18/nodejs#readme",
   "dependencies": {
-    "ansi": "^0.3.1"
+    "ansi": "^0.3.1",
+    "optimist": "^0.6.1",
+    "prompt": "^1.0.0"
   }
 }
