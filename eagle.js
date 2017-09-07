@@ -10,7 +10,7 @@ var schema = {
     properties: {
       choise: {
       	description: 'Угадайте число из 1 или 2',
-        pattern: /^[0-2\s\-]+$/,
+        pattern: /^[1-2\s\-]+$/,
         message: 'Вы неправильно указали значение',
         required: true
       }
@@ -20,15 +20,15 @@ var schema = {
 prompt.get(schema, function(err, result){
 	if (result.choise == eagle) {
 		console.log('Вы угадали');
-		writeLog(eagle+': '+true);
+		writeLog(true);
 	} else {
 		console.log('Вы не угадали');
-		writeLog(eagle+': '+false);
+		writeLog(false);
 	}
 });
 
 function writeLog(message){
-	fs.appendFile('log.txt', message+'\n', 'utf8', (err) => {
-		if (err) {throw err};
+	fs.appendFile('log.txt', '{ result: ' + message +'},\n', 'utf8', (err) => {
+		if (err) throw err;
 	});
 }
