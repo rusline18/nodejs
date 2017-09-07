@@ -1,8 +1,8 @@
 var prompt = require('prompt');
 var fs = require('fs');
+var sugar = require('sugar');
 
-var max = 2, min = 1;
-var eagle = Math.floor(Math.random() * (max-min+1))+min;
+var eagle = sugar.Number.random(1, 2);
 
 prompt.start();
 
@@ -28,7 +28,7 @@ prompt.get(schema, function(err, result){
 });
 
 function writeLog(message){
-	fs.appendFile('log.txt', '{ result: ' + message +'},\n', 'utf8', (err) => {
+	fs.appendFile('log.txt', message+'\n', 'utf8', (err) => {
 		if (err) throw err;
 	});
 }
