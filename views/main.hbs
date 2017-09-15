@@ -14,11 +14,15 @@
                 </select>
             </form>
             <div class="content">
-                {{#each tag}}
+                {{#each date}}
                 <h2>{{this}}</h2>
                 {{/each}}
-                <p>{{date}}</p>
-                <p>{{content}}</p>
+                {{#each title}}
+                <p>{{this}}</p>
+                {{/each}}
+                {{#each content}}
+                <p>{{this}}</p>
+                {{/each}}
             </div>
         </ul>
     </div>
