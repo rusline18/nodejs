@@ -4,6 +4,7 @@ let express = require('express')
     , app = express()
     , request = require('request')
     , cheerio = require('cheerio');
+require('sugar')();
 
 app.engine('hbs', templating.handlebars);
 app.set('view engine', 'hbs');
@@ -16,29 +17,27 @@ request('https://nix-tips.ru/tag/yii2', function (err, respons, html) {
     if (!err && respons.statusCode === 200){
         let $ = cheerio.load(html);
         $('article').each(function(i, element){
-            let tag = new Array();
-            let cols = $(this).find('div');
+            let title = $(this).find('.entry-title');
+            let date = $(this).find('.entry-date');
+            let content = $(this).find('p');
+            let arr = [];
+            while (date < 50){
+                arr.add(date);
+            }
             app.get('/', function(req, res){
                 res.render('main', {
                     header: 'Новости по yii2',
-                    tag: cols.eq(0).text(),
-                    date: cols.eq(1).text(),
-                    content: cols.eq(2).text(),
+                    date: $(date).text(),
+                    title: $(title).text(),
+                    content: $(content).text(),
                 });
             });
         });
+    } else {
+        console.log('Произошла ошибка!');
     }
 });
 
 app.listen(8888, function () {
     console.log('Сервер запущен');
 });
-
-function post($cols){
-    return [
-        {
-            title: $cols.eq(0).text(),
-            content: $cols.eq(2).text(),
-        }
-    ]
-}
