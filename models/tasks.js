@@ -1,24 +1,43 @@
-let pool = require('config.js');
+let pool = require(__dirname + '/../config.js');
 
 let Tasks = {
 	create: function(callback){
-		//TODO
+		pool.getConnection(function(err, connection){
+			pool.query('INSERT INTO tasks SET ?'
+				post,
+				function(err, rows){
+				pool.release();
+			});
+		});
 	},
 
 	delet: function(id, callback){
-		//TODO
+		pool.getConnection(function(err, connection){
+			pool.query('UPDATE INTO tasks SET id = ?'
+				[id],
+				function(err, rows){
+				pool.release();
+			});
+		});
 	},
 
 	update: function(id, callback){
-		//TODO
-	},
-
-	prioritet: function(id, callback){
-		//TODO
+		pool.getConnection(function(err, connection){
+			pool.query('UPDATE INTO tasks SET id = ?'
+				post,
+				function(err, rows){
+				pool.release();
+			});
+		});
 	},
 
 	list: function(callback){
-		//TODO
+		pool.getConnection(function(err, connection){
+			pool.query('SELECT * FROM tasks',
+				function(err, rows){
+				pool.release();
+			});
+		});
 	}
 };
 
