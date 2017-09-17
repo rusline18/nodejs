@@ -1,0 +1,27 @@
+<div class="entry">
+    <h1>{{header}}</h1>
+    {{#if error}}
+        <h2>Ошибка!{{error}}</h2>
+    {{/if}}
+        <div class="posts">
+            <div class="content">{{content}}</div>
+            <form action="" method="post">
+                <select name="posts" id="news">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+                <input type="submit">
+            </form>
+            {{#each title}}
+                <h1>{{this}}</h1>
+            {{/each}}
+            {{#each date}}
+                <div>{{date}}</div>
+            {{/each}}
+            {{#each post}}
+                <p>{{this}}</p>
+            {{/each}}
+        </div>
+</div>
