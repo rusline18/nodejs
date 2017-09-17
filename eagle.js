@@ -15,7 +15,7 @@ var schema = {
         required: true
       }
     }
-  };
+ };
 
 prompt.get(schema, function(err, result){
 	if (result.choise == eagle) {
