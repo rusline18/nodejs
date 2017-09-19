@@ -19,6 +19,10 @@
   "dependencies": {
     "ansi": "^0.3.1",
     "cheerio": "^1.0.0-rc.2",
+    "consolidate": "^0.14.5",
+    "express": "^4.15.4",
+    "handlebars": "^4.0.10",
+    "mysql": "^2.14.1",
     "optimist": "^0.6.1",
     "prompt": "^1.0.0",
     "request": "^2.81.0",
