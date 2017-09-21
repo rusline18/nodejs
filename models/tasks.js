@@ -7,7 +7,7 @@ let Tasks = {
                 if (err) reject(err);
                 return;
 
-                pool.query('INSERT INTO tasks SET ?',
+                connection.query('INSERT INTO tasks SET ?',
                     post,
                     function(err, rows){
                         if (err || !rows){
@@ -28,7 +28,7 @@ let Tasks = {
                 if (err) reject(err);
                 return;
 
-                pool.query('DELETE INTO tasks SET ?',
+                connection.query('DELETE INTO tasks SET ?',
                     post,
                     function(err, rows){
                         if (err || !rows){
@@ -49,7 +49,7 @@ let Tasks = {
                 if (err) reject(err);
                 return;
 
-                pool.query('UPDATE INTO tasks SET ?',
+                connection.query('UPDATE INTO tasks SET ?',
                     post,
                     function(err, rows){
                         if (err || !rows){
@@ -70,7 +70,7 @@ let Tasks = {
                 if (err) reject(err);
                 return;
 
-                pool.query('SELECT * FROM tasks',
+                connection.query('SELECT * FROM tasks',
                     function(err, rows){
                         if (err || !rows){
                             reject(err);
