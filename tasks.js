@@ -8,12 +8,11 @@ app.engine('hbs', templating.handlebars);
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 
+
+//Это правильно вывожу и в шаблоне скорее всего правильно буду выводить?
 app.get('/', function (req, res) {
-    Task.list((err, data) => {
-        res.render('main', {
-            err: err,
-            list: data
-        })
+    Task.list(Task => {
+        res.render('main', Task)
     });
 });
 

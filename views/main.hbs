@@ -17,7 +17,11 @@
                 <th>Срок</th>
             </tr>
             <tr>
-                {{#each list}}<td>{{this}}</td>{{/each}}
+                {{#each Task}}
+                    <td>{{this.text}}</td>
+                    <td>{{this.prioritet}}</td>
+                    <td>{{this.srok}}</td>
+                {{/each}}
             </tr>
         </table>
     </div>
