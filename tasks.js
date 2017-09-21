@@ -9,9 +9,15 @@ app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 
 app.get('/', function (req, res) {
-    Task.list(task => {
-        res.render('main', task)
-    });
+    Task.list(tasks => {
+        res.render('main', {
+            title: 'Задачник',
+            list: tasks
+        })
+    }).then(
+        result => {console.log(result)},
+        error => {console.log(error)}
+    );
 });
 
 
