@@ -3,7 +3,7 @@ let express = require('express')
     , cheerio = require('cheerio')
     , templating = require('consolidate')
     , request = require('request')
-    , tasks = require(.'models/tasks');
+    , tasks = require('models/tasks');
 
 app.engine('hbs', templating.handlebars);
 app.set('view engine', 'hbs');
@@ -36,7 +36,7 @@ request('https://nix-tips.ru/tag/yii2', function(err, response, html){
                 let arrTitle = [];
                 let arrContent = [];
                 arrTitle[] .= $(title).text();
-                arrContent[] .= $(content).text()
+                arrContent[] .= $(content).text();
                 console.log(arrTitle);
                 console.log(arrContent);
             });
