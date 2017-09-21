@@ -1,4 +1,5 @@
 let pool = require('../config/config');
+global.Promise = require('bluebird');
 
 let Tasks = {
     create: function(){
@@ -19,7 +20,11 @@ let Tasks = {
                         pool.release();
                     });
             });
-        });
+        }).then(
+            error => {
+                console.log(error);
+            }
+        );
     },
 
     delet: function(id){
@@ -40,7 +45,11 @@ let Tasks = {
                         pool.release();
                     });
             });
-        });
+        }).then(
+            error => {
+                console.log(error);
+            }
+        );
     },
 
     update: function(id){
@@ -61,13 +70,17 @@ let Tasks = {
                         pool.release();
                     });
             });
-        });
+        }).then(
+            error => {
+                console.log(error);
+            }
+        );
     },
 
     list: function(){
         return new Promise((resolve, reject) => {
             pool.getConnection(function(err, connection){
-                if (err) reject(err);
+                if (err) console.log(reject(err));
                 return;
 
                 connection.query('SELECT * FROM tasks',
@@ -81,7 +94,11 @@ let Tasks = {
                         pool.release();
                     });
             });
-        });
+        }).then(
+            error => {
+                console.log(error);
+            }
+        );
     }
 };
 
