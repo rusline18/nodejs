@@ -16,13 +16,14 @@
                 <th>Приоритет</th>
                 <th>Срок</th>
             </tr>
+            {{#each tasks}}
             <tr>
-                {{#each list}}
-                    <td>{{this.text}}</td>
-                    <td>{{this.prioritet}}</td>
-                    <td>{{this.srok}}</td>
-                {{/each}}
+                <td></td>
+                <td>{{this.text}}</td>
+                <td>{{this.prioritet}}</td>
+                <td>{{this.srok}}</td>
             </tr>
+            {{/each}}
         </table>
     </div>
 </div>
