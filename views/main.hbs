@@ -3,12 +3,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css" />
     <link rel="stylesheet" href="/views/style.css">
 </head>
 <body>
 <div class="tasks-index">
     <h1>{{title}}</h1>
-    <button class="btn btn-success">Добавить</button>
+    <div class="container">
+        <div class="col-lg-3">
+            <form method="post">
+                <h3>Добавить задачу</h3>
+                <div>
+                    <label for="text-form">Задача</label>
+                    <input type="text" name="text" id="text-form">
+                </div>
+                <div>
+                    <label for="srok-form">Срок</label>
+                    <input type="datetime-local" name="srok" id="srok">
+                </div>
+                <div>
+                    <select name="prioritet">
+                        <option value="1">Низкий</option>
+                        <option value="2">Средний</option>
+                        <option value="3">Высокий</option>
+                    </select>
+                </div>
+                <input type="submit" class="btn btn-success" value="Добавить">
+            </form>
+        </div>
+    </div>
     <div class="container">
         <table>
             <tr>
@@ -16,6 +39,7 @@
                 <th>Задача</th>
                 <th>Приоритет</th>
                 <th>Срок</th>
+                <th></th>
             </tr>
             {{#each tasks}}
             <tr>
@@ -23,6 +47,14 @@
                 <td>{{this.text}}</td>
                 <td>{{this.prioritet}}</td>
                 <td>{{this.srok}}</td>
+                <th>
+                    <a href="update/{{this.id}}">
+                        <span class="typcn typcn-pencil green-icon"></span>
+                    </a>
+                    <a href="delete/{{this.id}}">
+                        <span class="typcn typcn-delete green-icon"></span>
+                    </a>
+                </th>
             </tr>
             {{/each}}
         </table>
