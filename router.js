@@ -123,9 +123,6 @@ app.post('/login', passport.authenticate('local', {
       res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 }); // Почему-то в куках браузера я его не вижу, только сессии.
       return next();
     });
-  },
-  (req, res) => {
-    res.redirect('/');
   });
 
 app.post('/task', (req, res) => {
