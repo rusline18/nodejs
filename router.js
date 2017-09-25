@@ -5,9 +5,10 @@ let express = require('express'),
     bodyParser = require('body-parser'),
     handlebars = require('handlebars'),
     session = require('cookie-session'),
+    cookieParser = require('cookie-parser'),
     passport = require('passport'),
     LocaleStrategy = require('passport-local').Strategy,
-    RememberMeStrategy = require('passport-remember-me').Strategy,
+    VKontakteStrategy = require('passport-vkontakte').Strategy,
     Task = require('./models/tasks');
 
 global.Promise = require('bluebird');
@@ -39,6 +40,19 @@ passport.use(new LocaleStrategy((username, password, done) => {
         })
 }));
 
+passport.use(new VKontakteStrategy({
+    clientID: VKONTAKTE_APP_ID,
+    clientSecret: VKONTAKTE_APP_SECRET,
+    callbackURL: "http://localhost:8888/auth/vkontakte/callback"
+},
+    function myVerifyCallback(accessToken, refreshToken, params, profile, done) {
+        return done(null, {
+            username: profile.displayName,
+            profileUrl: profile.profileUrl
+        })
+    })
+);
+
 passport.serializeUser((user, done) => {
     done(null, user.username);
 });
@@ -53,7 +67,7 @@ handlebars.registerHelper('selected', (option, value) => {
     } else {
         return '';
     }
-})
+});
 
 app.all('/task', mustBeAuthenticated);
 app.all('/task/*', mustBeAuthenticated);
@@ -103,39 +117,44 @@ app.get('/delete/:id', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.render('login');
-})
+});
 
 app.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/login');
-})
+});
 
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/task',
     failureRedirect: '/login',
     failureFlash: true,
 }), (req, res, next)  => {
-    if (!req.body.remember_me) { return next(); }
-
-    var token = utils.generateToken(64);
-    Token.save(token, { userId: req.user.id }, function(err) {
-      if (err) { return done(err); }
-      res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 }); // Почему-то в куках браузера я его не вижу, только сессии.
-      return next();
-    });
+    if (req.body.remember) {
+        req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+    } else {
+        req.session.cookie.expires = false;
+    }
   });
 
 app.post('/task', (req, res) => {
     Task.create(req.body).then(tasks => {
         res.redirect('/task')
     })
-})
+});
 
 app.post('/update/:id', (req, res) => {
     Task.update(req.params.id, req.body).then(tasks => {
         res.redirect('/')
     })
-})
+});
+
+app.get('/auth/vk', passport.authenticate('vk'));
+app.get('/auth/vk/callback',
+    passport.authenticate('vk', {
+        successRedirect: '/task',
+        failureRedirect: '/login'
+    }
+))
 
 
 app.listen(8888, function(){
