@@ -35,15 +35,16 @@ passport.use(new LocaleStrategy((username, password, done) => {
     if (username == 'admin' && password == 'admin') {
         return done(null, {username: 'admin'})
     }
-    return done(null, false, { 
+    return done(null, false, {
+        //message вообще когда должен выводиться и как его вызывать, в шаблоне использовать alert?
             message: 'Неверный логин или пароль' 
         })
 }));
 
 passport.use(new VKontakteStrategy({
-    clientID: VKONTAKTE_APP_ID,
-    clientSecret: VKONTAKTE_APP_SECRET,
-    callbackURL: "http://localhost:8888/auth/vkontakte/callback"
+    clientID: 6197191,
+    clientSecret: 'a3ulPX3sHmVsiQyrS189',
+    callbackURL: 'http://localhost:8888/auth/vk/callback'
 },
     function myVerifyCallback(accessToken, refreshToken, params, profile, done) {
         return done(null, {
@@ -103,7 +104,7 @@ app.get('/update/:id', (req, res) => {
             task.srok = moment(task.srok).format('YYYY-MM-DDTHH:mm:ss.SSS');
 
             return task;
-        })
+        });
             res.render('update', {title: 'Редактирование задачи: '+task[0].id, task: task})
         }
     )
@@ -129,6 +130,7 @@ app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true,
 }), (req, res, next)  => {
+    //Вот так правильно я сделал запомни меня или нет?
     if (req.body.remember) {
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
     } else {
@@ -148,13 +150,13 @@ app.post('/update/:id', (req, res) => {
     })
 });
 
-app.get('/auth/vk', passport.authenticate('vk'));
+app.get('/auth/vk', passport.authenticate('vkontakte'));
 app.get('/auth/vk/callback',
-    passport.authenticate('vk', {
+    passport.authenticate('vkontakte', {
         successRedirect: '/task',
         failureRedirect: '/login'
     }
-))
+));
 
 
 app.listen(8888, function(){
