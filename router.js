@@ -31,15 +31,28 @@ let mustBeAuthenticated = (req, res, next) => {
     req.isAuthenticated() ? next() : res.redirect('/login');
 }
 
-passport.use(new LocaleStrategy((username, password, done) => {
-    if (username == 'admin' && password == 'admin') {
-        return done(null, {username: 'admin'})
-    }
-    return done(null, false, {
-        //message вообще когда должен выводиться и как его вызывать, в шаблоне использовать alert?
-            message: 'Неверный логин или пароль' 
-        })
+passport.use(new LocaleStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    passReqToCallback: true,
+}, (req, username, password, done) => {
+    if (!username || !password){return done(null, false, req.flash('message', 'Логин или пароль неверны'))};
+    pool.getConnection((err, connection) => {
+        if (err) throw done(err);
+        connection.query('SELECT * FROM user WHERE username = ?',
+            [username],
+            function (err, rows) {
+                if (err) return done(req.flash('message', err));
+                if(!rows.length){ return done(null, false, req.flash('message','Неверный логин или пароль.')); }
+                if (!(password == rows[0].password)){
+                    return done(null, false, req.flash('message','Неверный логин или пароль'));
+                }
+                return done(null, rows[0]);
+            })
+    })
 }));
+
+
 
 passport.use(new VKontakteStrategy({
     clientID: 6197191,
@@ -55,11 +68,15 @@ passport.use(new VKontakteStrategy({
 );
 
 passport.serializeUser((user, done) => {
-    done(null, user.username);
+    done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-    done(null, {username: id});
+    pool.getConnection((err, connection) => {
+        connection.query("SELECT * FROM user WHERE id = " + id, (err, rows) => {
+            done(err, rows[0]);
+        });
+    });
 });
 
 handlebars.registerHelper('selected', (option, value) => {
