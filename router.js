@@ -32,7 +32,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 let mustBeAuthenticated = (req, res, next) => {
-    req.isAuthenticated() ? next() : res.redirect('/login');
+    req.isAuthenticated() 
+        ? next() 
+        : res.redirect('/login');
 }
 
 passport.use(new LocaleStrategy({
@@ -47,7 +49,7 @@ passport.use(new LocaleStrategy({
         if (err) throw done(err);
         connection.query('SELECT * FROM user WHERE username = ?',
             [username],
-            function (err, rows) {
+            (err, rows) => {
                 if (err) return done(err);
                 if(!rows.length){ 
                     return done(null, false); 
@@ -56,8 +58,8 @@ passport.use(new LocaleStrategy({
                     return done(null, false);
                 }
                 return done(null, rows[0].username);
-            })
-    })
+            });
+    });
 }));
 
 passport.use(new VKontakteStrategy({
@@ -69,8 +71,8 @@ passport.use(new VKontakteStrategy({
         return done(null, {
             username: profile.displayName,
             profileUrl: profile.profileUrl
-        })
-    })
+        });
+    });
 );
 
 passport.serializeUser((user, done) => {
@@ -103,7 +105,7 @@ app.all('/delete/*', mustBeAuthenticated);
 
 app.get('/task', (req, res) => {
     Task.list().then(tasks => {
-        tasks = tasks.map(function (task) {
+        tasks = tasks.map((task) => {
             task.srok = moment(task.srok).format('D MMMM YYYY HH:mm');
             if (task.prioritet == 1) {
                 task.prioritet = 'Низкий';
@@ -114,19 +116,21 @@ app.get('/task', (req, res) => {
             }
             return task;
         });
-        res.render('main', {title: 'Задачник', tasks: tasks})
+        res.render('main', {title: 'Задачник', tasks: tasks});
     })
 });
 
 app.get('/update/:id', (req, res) => {
     Task.getId(req.params.id).then(task => {
-        task = task.map(function(task){
+        task = task.map((task) => {
             task.srok = moment(task.srok).format('YYYY-MM-DDTHH:mm:ss.SSS');
             return task;
         });
-            res.render('update', {title: 'Редактирование задачи: '+task[0].id, task: task})
-        }
-    )
+        res.render('update', {
+            title: 'Редактирование задачи: '+task[0].id,
+            task: task
+        });
+    });
 });
 
 app.get('/delete/:id', (req, res) => {
@@ -159,13 +163,13 @@ app.post('/login', passport.authenticate('local', {
 app.post('/task', (req, res) => {
     Task.create(req.body).then(tasks => {
         res.redirect('/task')
-    })
+    });
 });
 
 app.post('/update/:id', (req, res) => {
     Task.update(req.params.id, req.body).then(tasks => {
         res.redirect('/')
-    })
+    });
 });
 
 app.get('/auth/vk', passport.authenticate('vkontakte'));
