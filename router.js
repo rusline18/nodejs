@@ -13,6 +13,10 @@ let express = require('express'),
 
 global.Promise = require('bluebird');
 
+moment.locale('ru');
+moment.updateLocale('ru', {
+    months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+});
 
 app.engine('hbs', templating.handlebars);
 app.use(express.static(__dirname));
@@ -36,23 +40,25 @@ passport.use(new LocaleStrategy({
     passwordField: 'password',
     passReqToCallback: true,
 }, (req, username, password, done) => {
-    if (!username || !password){return done(null, false, req.flash('message', 'Логин или пароль неверны'))};
+    if (!username || !password){
+        return done(null, false)
+    };
     pool.getConnection((err, connection) => {
         if (err) throw done(err);
         connection.query('SELECT * FROM user WHERE username = ?',
             [username],
             function (err, rows) {
-                if (err) return done(req.flash('message', err));
-                if(!rows.length){ return done(null, false, req.flash('message','Неверный логин или пароль.')); }
-                if (!(password == rows[0].password)){
-                    return done(null, false, req.flash('message','Неверный логин или пароль'));
+                if (err) return done(err);
+                if(!rows.length){ 
+                    return done(null, false); 
                 }
-                return done(null, rows[0]);
+                if (!(password == rows[0].password)){
+                    return done(null, false);
+                }
+                return done(null, rows[0].username);
             })
     })
 }));
-
-
 
 passport.use(new VKontakteStrategy({
     clientID: 6197191,
@@ -73,7 +79,9 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
     pool.getConnection((err, connection) => {
-        connection.query("SELECT * FROM user WHERE id = " + id, (err, rows) => {
+        connection.query("SELECT * FROM user WHERE id = ?",
+         [id], 
+         (err, rows) => {
             done(err, rows[0]);
         });
     });
@@ -96,10 +104,6 @@ app.all('/delete/*', mustBeAuthenticated);
 app.get('/task', (req, res) => {
     Task.list().then(tasks => {
         tasks = tasks.map(function (task) {
-            moment.locale('ru');
-            moment.updateLocale('ru', {
-                months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
-            });
             task.srok = moment(task.srok).format('D MMMM YYYY HH:mm');
             if (task.prioritet == 1) {
                 task.prioritet = 'Низкий';
@@ -108,7 +112,6 @@ app.get('/task', (req, res) => {
             } else {
                 task.prioritet = 'Высокий';
             }
-
             return task;
         });
         res.render('main', {title: 'Задачник', tasks: tasks})
@@ -119,7 +122,6 @@ app.get('/update/:id', (req, res) => {
     Task.getId(req.params.id).then(task => {
         task = task.map(function(task){
             task.srok = moment(task.srok).format('YYYY-MM-DDTHH:mm:ss.SSS');
-
             return task;
         });
             res.render('update', {title: 'Редактирование задачи: '+task[0].id, task: task})
@@ -147,7 +149,6 @@ app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true,
 }), (req, res, next)  => {
-    //Вот так правильно я сделал запомни меня или нет?
     if (req.body.remember) {
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
     } else {
@@ -174,7 +175,6 @@ app.get('/auth/vk/callback',
         failureRedirect: '/login'
     }
 ));
-
 
 app.listen(8888, function(){
     console.log('Сервер запущен');
