@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css" />
+    <link rel="stylesheet" href="/views/style.css">
+</head>
+<body>
+	<div class="container">
+		<div class="col-lg-5">
+		<h1>Авторизация</h1>
+		<form method="post">
+		<div class="form-group">
+			<label for="username-field">Логин</label>
+			<input type="text" name="username" id="username-field" class ="form-control" placeholder="Введите логин">
+		</div>
+		<div class="form-group">
+			<label for="password-field">Пароль</label>
+			<input type="password" name="password" id="password-field" class ="form-control" placeholder="Введите пароль">
+		</div>
+		<div class="form-group">
+			<input type="checkbox" name="remember_me" id="remember_me">
+			<label for="remember">Запомнить меня</label>
+		</div>
+		<input type="submit" name="submit" class="btn btn-lg btn-success" value="Войти">
+		</form>
+		</div>
+        <a href="/auth/vk">Войти через VK.com</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css" />
+	<link rel="stylesheet" href="/views/style.css">
+</head>
+<body>
+	<h1>{{title}}</h1>
+	<div class="container">
+		<form method="post">
+			{{#each task}}
+			<div>
+				<label for="text-form">Задача</label>
+				<input type="text" name="text" id="text-form" value="{{this.text}}">
+			</div>
+			<div>
+				<label for="srok-form">Срок</label>
+				<input type="datetime-local" name="srok" id="srok" value="{{this.srok}}">
+			</div>
+			<div>
+				<select name="prioritet" value="{{this.prioritet}}">
+					<option value="1" {{#selected this.prioritet 1}}selected{{/selected}}>Низкий</option>
+					<option value="2" {{#selected this.prioritet 2}}selected{{/selected}}>Средний</option>
+					<option value="3" {{#selected this.prioritet 3}}selected{{/selected}}>Высокий</option>
+				</select>
+			</div>
+			{{/each}}
+			<input type="submit" class="btn btn-success" value="Добавить">
+		</form>
+	</div>
+</body>
+</html>
