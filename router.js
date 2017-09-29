@@ -4,7 +4,6 @@ let express = require("express"),
 	templating = require("consolidate"),
 	moment = require("moment"),
 	bodyParser = require("body-parser"),
-	jsonParser = bodyParser.json(),
 	handlebars = require("handlebars"),
 	session = require("cookie-session"),
 	passport = require("passport"),
@@ -103,7 +102,6 @@ app.all("/task/*", mustBeAuthenticated);
 app.all("/update/*", mustBeAuthenticated);
 app.all("/delete/*", mustBeAuthenticated);
 
-
 app.get("/task", (req, res) => {
 	Task.list().then(tasks => {
 		tasks = tasks.map((task) => {
@@ -164,30 +162,73 @@ app.put("/update/:id", (req, res) => {
 	);
 });
 
-app.delete("/delete/:id", (req, res) => {
-	Task.delete(req.params.id).then(
-		res.redirect("/")
-	);
-});
-
-app.get("/login", (req, res) => {res.render("login");
-});
-
-app.get("/logout", (req, res) => {
-	req.logout();
-	res.redirect("/login");
-});
-
 app.post("/login", passport.authenticate("local", {
 	successRedirect: "/task",
 	failureRedirect: "/login",
 	failureFlash: true,
-}), (req)  => {
+}), (req, res, next)  => {
 	if (req.body.remember) {
 		req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
 	} else {
 		req.session.cookie.expires = false;
 	}
+});
+
+app.post("/task", (req, res) => {
+	Task.create(req.body).then(tasks => {
+		res.redirect("/task");
+	});
+});
+
+app.get("/tasks", (req, res) => {
+	Task.list().then(tasks => {
+		res.send(tasks);
+	},
+	error => {
+		res.send(error);
+	});
+});
+
+app.post("/tasks", (req, res) => {
+	Task.create(req.body).then(tasks => {
+		res.send(tasks);
+	},
+	error => {
+		res.send(error);
+	});
+});
+
+app.get("/tasks/:id", (req, res) => {
+	Task.getId(req.params.id).then(tasks => {
+		res.send(tasks);
+	},
+	error => {
+		res.send(error);
+	});
+});
+
+app.put("/tasks/:id", (req, res) => {
+	Task.update(req.params.id ,req.body).then(tasks => {
+		res.send(tasks);
+	},
+	error => {
+		res.send(error);
+	});
+});
+
+app.delete("/tasks/:id", (req, res) => {
+	Task.delete(req.params.id).then(tasks => {
+		res.send(tasks);
+	},
+	error => {
+		res.send(error);
+	});
+});
+
+app.post("/update/:id", (req, res) => {
+	Task.update(req.params.id, req.body).then(
+		res.redirect("/")
+	);
 });
 
 app.get("/auth/vk", passport.authenticate("vkontakte"));
